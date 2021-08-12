@@ -49,41 +49,40 @@ unset TODO_FILE DONE_FILE REPORT_FILE TMP_FILE
 # This test checks if command xyzzy does the right thing...
 # '
 # . ./test-lib.sh
-[ "x$ORIGINAL_TERM" != "xdumb" ] && (
-		TERM=$ORIGINAL_TERM &&
-		export TERM &&
-		[ -t 1 ] &&
-		tput bold >/dev/null 2>&1 &&
-		tput setaf 1 >/dev/null 2>&1 &&
-		tput sgr0 >/dev/null 2>&1
-	) &&
-	color=t
+[ "$ORIGINAL_TERM" != "dumb" ] && (
+        TERM=$ORIGINAL_TERM &&
+        export TERM &&
+        [ -t 1 ] &&
+        tput bold >/dev/null 2>&1 &&
+        tput setaf 1 >/dev/null 2>&1 &&
+        tput sgr0 >/dev/null 2>&1
+    ) &&
+    color='t'
 
-while test "$#" -ne 0
-do
-	case "$1" in
-	-d|--d|--de|--deb|--debu|--debug)
-		debug=t; shift ;;
-	-i|--i|--im|--imm|--imme|--immed|--immedi|--immedia|--immediat|--immediate)
-		immediate=t; shift ;;
-	-l|--l|--lo|--lon|--long|--long-|--long-t|--long-te|--long-tes|--long-test|--long-tests)
-		TODOTXT_TEST_LONG=t; export TODOTXT_TEST_LONG; shift ;;
-	-h|--h|--he|--hel|--help)
-		help=t; shift ;;
-	-v|--v|--ve|--ver|--verb|--verbo|--verbos|--verbose)
-		verbose=t; shift ;;
-	-q|--q|--qu|--qui|--quie|--quiet)
-		quiet=t; shift ;;
-	--no-color)
-		color=; shift ;;
-	--no-python)
-		# noop now...
-		shift ;;
-	--tee)
-		shift ;; # was handled already
-	*)
-		break ;;
-	esac
+while [ $# -ne 0 ]; do
+    case "$1" in
+      -d|--d|--de|--deb|--debu|--debug)
+        debug='t'; shift;;
+      -i|--i|--im|--imm|--imme|--immed|--immedi|--immedia|--immediat|--immediate)
+        immediate='t'; shift;;
+      -l|--l|--lo|--lon|--long|--long-|--long-t|--long-te|--long-tes|--long-test|--long-tests)
+        TODOTXT_TEST_LONG='t'; export TODOTXT_TEST_LONG; shift;;
+      -h|--h|--he|--hel|--help)
+        help='t'; shift;;
+      -v|--v|--ve|--ver|--verb|--verbo|--verbos|--verbose)
+        verbose='t'; shift;;
+      -q|--q|--qu|--qui|--quie|--quiet)
+        quiet='t'; shift;;
+      --no-color)
+        color=; shift;;
+      --no-python)
+        # noop now...
+        shift;;
+      --tee)
+        shift;; # was handled already
+      *)
+        break;;
+    esac
 done
 
 if test -n "$color"; then

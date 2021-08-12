@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 
-[ "x$TERM" != "xdumb" ] && (
-		export TERM &&
-		[ -t 1 ] &&
-		tput bold >/dev/null 2>&1 &&
-		tput setaf 1 >/dev/null 2>&1 &&
-		tput sgr0 >/dev/null 2>&1
-	) &&
-	color=t
+[ "$TERM" != "dumb" ] && (
+        export TERM &&
+        [ -t 1 ] &&
+        tput bold >/dev/null 2>&1 &&
+        tput setaf 1 >/dev/null 2>&1 &&
+        tput sgr0 >/dev/null 2>&1
+    ) &&
+    color='t'
 
 case "$1" in
   --no-color)
