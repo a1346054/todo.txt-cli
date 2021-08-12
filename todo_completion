@@ -29,63 +29,71 @@ _todo() {
     else
         case "$prev" in
           command)
-              completions=$COMMANDS;;
+            completions=$COMMANDS
+            ;;
           help)
-              completions="$COMMANDS $(eval TODOTXT_VERBOSE=0 "$_todo_sh" command listaddons 2>/dev/null)";;
-          -*) completions="$COMMANDS $(eval TODOTXT_VERBOSE=0 "$_todo_sh" command listaddons 2>/dev/null) $OPTS";;
-          *)  if [[ $prev =~ ^(addto|listfile|lf${_todo_file1_actions:+|${_todo_file1_actions}})$ ]]; then
-                  completions=$(eval TODOTXT_VERBOSE=0 "$_todo_sh" command listfile 2>/dev/null)
-              else
-                  case "$cur" in
-                    +*) completions=$(eval TODOTXT_VERBOSE=0 "$_todo_sh" command listproj 2>/dev/null)
-                        COMPREPLY=($(compgen -W "$completions" -- "$cur"))
-                        [[ ${#COMPREPLY[@]} -gt 0 ]] && return 0
-                        # Fall back to projects extracted from done tasks.
-                        completions=$(eval 'TODOTXT_VERBOSE=0 TODOTXT_SOURCEVAR=\$DONE_FILE' "$_todo_sh" command listproj 2>/dev/null)
-                        ;;
-                    @*) completions=$(eval TODOTXT_VERBOSE=0 "$_todo_sh" command listcon 2>/dev/null)
-                        COMPREPLY=($(compgen -W "$completions" -- "$cur"))
-                        [[ ${#COMPREPLY[@]} -gt 0 ]] && return 0
-                        # Fall back to contexts extracted from done tasks.
-                        completions=$(eval 'TODOTXT_VERBOSE=0 TODOTXT_SOURCEVAR=\$DONE_FILE' "$_todo_sh" command listcon 2>/dev/null)
-                        ;;
-                    *)  if [[ $cur =~ ^[0-9]+$ ]]; then
-                            declare -a sedTransformations=(
-                                # Remove the (padded) task number; we prepend the
-                                # user-provided $cur instead.
-                                -e 's/^ *[0-9]\{1,\} //'
-                                # Remove the timestamp prepended by the -t option,
-                                # but keep any priority (as it's short and may
-                                # provide useful context).
-                                -e 's/^\((.) \)\{0,1\}[0-9]\{2,4\}-[0-9]\{2\}-[0-9]\{2\} /\1/'
-                                # Remove the done date and (if there) the timestamp.
-                                # Keep the "x" (as it's short and may provide useful
-                                # context)
-                                -e 's/^\([xX] \)\([0-9]\{2,4\}-[0-9]\{2\}-[0-9]\{2\} \)\{1,2\}/\1/'
-                                # Remove any trailing whitespace; the Bash
-                                # completion inserts a trailing space itself.
-                                -e 's/[[:space:]]*$//'
-                                # Finally, limit the output to a single line just as
-                                # a safety check of the ls action output.
-                                -e '1q'
-                            )
-                            local todo
-                            todo=$( \
-                                eval TODOTXT_VERBOSE=0 "$_todo_sh" '-@ -+ -p -x command ls "^ *${cur} "' 2>/dev/null | \
-                                sed "${sedTransformations[@]}" \
-                            )
-                            # Append task text as a shell comment. This
-                            # completion can be a safety check before a
-                            # destructive todo.txt operation.
-                            [[ -n $todo ]] && COMPREPLY[0]="$cur # $todo"
-                            return 0
-                        else
-                            return 0
-                        fi
-                        ;;
-                  esac
-              fi
-              ;;
+            completions="$COMMANDS $(eval TODOTXT_VERBOSE=0 "$_todo_sh" command listaddons 2>/dev/null)"
+            ;;
+          -*)
+            completions="$COMMANDS $(eval TODOTXT_VERBOSE=0 "$_todo_sh" command listaddons 2>/dev/null) $OPTS"
+            ;;
+          *)
+            if [[ $prev =~ ^(addto|listfile|lf${_todo_file1_actions:+|${_todo_file1_actions}})$ ]]; then
+                completions=$(eval TODOTXT_VERBOSE=0 "$_todo_sh" command listfile 2>/dev/null)
+            else
+                case "$cur" in
+                  +*)
+                    completions=$(eval TODOTXT_VERBOSE=0 "$_todo_sh" command listproj 2>/dev/null)
+                    COMPREPLY=($(compgen -W "$completions" -- "$cur"))
+                    [[ ${#COMPREPLY[@]} -gt 0 ]] && return 0
+                    # Fall back to projects extracted from done tasks.
+                    completions=$(eval 'TODOTXT_VERBOSE=0 TODOTXT_SOURCEVAR=\$DONE_FILE' "$_todo_sh" command listproj 2>/dev/null)
+                    ;;
+                  @*)
+                    completions=$(eval TODOTXT_VERBOSE=0 "$_todo_sh" command listcon 2>/dev/null)
+                    COMPREPLY=($(compgen -W "$completions" -- "$cur"))
+                    [[ ${#COMPREPLY[@]} -gt 0 ]] && return 0
+                    # Fall back to contexts extracted from done tasks.
+                    completions=$(eval 'TODOTXT_VERBOSE=0 TODOTXT_SOURCEVAR=\$DONE_FILE' "$_todo_sh" command listcon 2>/dev/null)
+                    ;;
+                  *)
+                    if [[ $cur =~ ^[0-9]+$ ]]; then
+                        declare -a sedTransformations=(
+                            # Remove the (padded) task number; we prepend the
+                            # user-provided $cur instead.
+                            -e 's/^ *[0-9]\{1,\} //'
+                            # Remove the timestamp prepended by the -t option,
+                            # but keep any priority (as it's short and may
+                            # provide useful context).
+                            -e 's/^\((.) \)\{0,1\}[0-9]\{2,4\}-[0-9]\{2\}-[0-9]\{2\} /\1/'
+                            # Remove the done date and (if there) the timestamp.
+                            # Keep the "x" (as it's short and may provide useful
+                            # context)
+                            -e 's/^\([xX] \)\([0-9]\{2,4\}-[0-9]\{2\}-[0-9]\{2\} \)\{1,2\}/\1/'
+                            # Remove any trailing whitespace; the Bash
+                            # completion inserts a trailing space itself.
+                            -e 's/[[:space:]]*$//'
+                            # Finally, limit the output to a single line just as
+                            # a safety check of the ls action output.
+                            -e '1q'
+                        )
+                        local todo
+                        todo=$( \
+                            eval TODOTXT_VERBOSE=0 "$_todo_sh" '-@ -+ -p -x command ls "^ *${cur} "' 2>/dev/null | \
+                            sed "${sedTransformations[@]}" \
+                        )
+                        # Append task text as a shell comment. This
+                        # completion can be a safety check before a
+                        # destructive todo.txt operation.
+                        [[ -n $todo ]] && COMPREPLY[0]="$cur # $todo"
+                        return 0
+                    else
+                        return 0
+                    fi
+                    ;;
+                esac
+            fi
+            ;;
         esac
     fi
 
