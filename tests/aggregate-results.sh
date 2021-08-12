@@ -14,29 +14,29 @@ case "$1" in
     color=; shift;;
 esac
 
-if test -n "$color"; then
-	say_color() {
-		(
-		export TERM
-		case "$1" in
-			error) tput bold; tput setaf 1;; # bold red
-			skip)  tput bold; tput setaf 2;; # bold green
-			pass)  tput setaf 2;;            # green
-			info)  tput setaf 3;;            # brown
-			*) test -n "$quiet" && return;;
-		esac
-		shift
-		printf "* %s" "$*"
-		tput sgr0
-		echo
-		)
-	}
+if [ -n "$color" ]; then
+    say_color() {
+        (
+        export TERM
+        case "$1" in
+          error) tput bold; tput setaf 1;; # bold red
+          skip)  tput bold; tput setaf 2;; # bold green
+          pass)  tput setaf 2;;            # green
+          info)  tput setaf 3;;            # brown
+          *) [ -n "$quiet" ] && return;;
+        esac
+        shift
+        printf "* %s" "$*"
+        tput sgr0
+        echo
+        )
+    }
 else
-	say_color() {
-		test -z "$1" && test -n "$quiet" && return
-		shift
-		echo "* $*"
-	}
+    say_color() {
+        [ -z "$1" ] && [ -n "$quiet" ] && return
+        shift
+        echo "* $*"
+    }
 fi
 
 get_color() {
