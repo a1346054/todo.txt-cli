@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
-make_action()
-{
+make_action() {
     unset TODO_ACTIONS_DIR
     [ -d .todo.actions.d ] || mkdir .todo.actions.d
     cat > ".todo.actions.d/$1" <<EOF
@@ -17,8 +16,7 @@ EOF
 chmod +x ".todo.actions.d/$1"
 }
 
-make_action_in_folder()
-{
+make_action_in_folder() {
     unset TODO_ACTIONS_DIR
     [ -d .todo.actions.d ] || mkdir .todo.actions.d
     mkdir ".todo.actions.d/$1"

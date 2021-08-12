@@ -3,7 +3,7 @@
 test_description='test the priority on add feature'
 . ./test-lib.sh
 
-## Normal use case
+# Normal use case
 echo "export TODOTXT_PRIORITY_ON_ADD=A" >> todo.cfg
 
 test_todo_session 'config file priority' <<EOF
@@ -17,7 +17,7 @@ TODO: 1 added.
 TODO: 1 of 1 tasks shown
 EOF
 
-## Wrong value in config var
+# Wrong value in config var
 echo "export TODOTXT_PRIORITY_ON_ADD=1" >> todo.cfg
 
 test_todo_session 'config file wrong priority' <<EOF

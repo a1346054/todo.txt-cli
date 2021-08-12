@@ -19,8 +19,7 @@ test_expect_success 'todo2.sh executable' 'todo2.sh list'
 # Define a second completion function that injects the different executable. In
 # real use, this would be installed via
 #   complete -F _todo2 todo2.sh
-_todo2()
-{
+_todo2() {
     local _todo_sh='todo2.sh'
     _todo "$@"
 }
@@ -32,8 +31,7 @@ test_todo_custom_completion _todo2 'all todo2 contexts' 'todo2 list @' '@garden 
 PATH=${PATH##"${PWD}/bin:"}
 test_expect_code 127 'todo2.sh executable not in PATH' 'todo2.sh'
 
-_todo2path()
-{
+_todo2path() {
     local _todo_sh='./bin/todo2.sh'
     _todo "$@"
 }

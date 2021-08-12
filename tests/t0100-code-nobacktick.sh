@@ -9,8 +9,7 @@ On failure, it will print each offending line number and line.
 '
 . ./test-lib.sh
 
-backtick_check()
-{
+backtick_check() {
     sed -n -e 's/\(^\|[ \t]\)#.*//' -e '/`/{' -e '=;p' -e '}' "$@"
 }
 

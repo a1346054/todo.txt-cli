@@ -24,12 +24,11 @@ EOF
 
 # Note: We cannot use aliases within the test framework, but functions are
 # equivalent and work fine.
-todo1()
-{
+todo1() {
     todo.sh "$@"
 }
-todo2()
-{
+
+todo2() {
     todo.sh -d "$HOME/todo2.cfg" "$@"
 }
 
@@ -48,8 +47,7 @@ EOF
 # Define a second completion function that injects the different configuration
 # file. In real use, this would be installed via
 #   complete -F _todo2 todo2
-_todo2()
-{
+_todo2() {
     local _todo_sh='todo.sh -d "$HOME/todo2.cfg"'
     _todo "$@"
 }

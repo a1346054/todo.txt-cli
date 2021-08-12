@@ -101,7 +101,7 @@ cat > todo.txt <<EOF
 (C) notice the sunflowers +sunflowers @garden +shared +landscape
 stop
 EOF
-TEST_TODO_CUSTOM=todo-custom.cfg
+TEST_TODO_CUSTOM='todo-custom.cfg'
 cat todo.cfg > "$TEST_TODO_CUSTOM"
 cat >> "$TEST_TODO_CUSTOM" <<'EOF'
 export DEFAULT='</color>'

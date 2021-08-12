@@ -6,7 +6,7 @@ This test checks the highlighting (with colors) of prioritized tasks.
 '
 . ./test-lib.sh
 
-TEST_TODO_=todo.cfg
+TEST_TODO_='todo.cfg'
 
 #
 # check the highlighting of prioritized tasks
@@ -39,7 +39,7 @@ EOF
 # check changing the color definitions into something other than ANSI color
 # escape sequences
 #
-TEST_TODO_CUSTOM=todo-custom.cfg
+TEST_TODO_CUSTOM='todo-custom.cfg'
 cat todo.cfg > "$TEST_TODO_CUSTOM"
 cat >> "$TEST_TODO_CUSTOM" <<'EOF'
 export YELLOW='${color yellow}'
@@ -69,7 +69,7 @@ EOF
 #
 # check defining highlightings for more priorities than the default A, B, C
 #
-TEST_TODO_ADDITIONAL=todo-additional.cfg
+TEST_TODO_ADDITIONAL='todo-additional.cfg'
 cat todo.cfg > "$TEST_TODO_ADDITIONAL"
 cat >> "$TEST_TODO_ADDITIONAL" <<'EOF'
 export PRI_E=$BROWN
@@ -91,7 +91,7 @@ EOF
 
 # check changing the fallback highlighting for undefined priorities
 #
-TEST_TODO_PRI_X=todo-pri-x.cfg
+TEST_TODO_PRI_X='todo-pri-x.cfg'
 cat todo.cfg > "$TEST_TODO_PRI_X"
 cat >> "$TEST_TODO_PRI_X" <<'EOF'
 export PRI_X=$BROWN

@@ -24,22 +24,22 @@ esac
 # Keep the original TERM for say_color
 ORIGINAL_TERM=$TERM
 
-# For repeatability, reset the environment to known value.
-LANG=C
-LC_ALL=C
-PAGER=cat
-TZ=UTC
-TERM=dumb
+# For repeatability, reset the environment to known values.
+LANG='C'
+LC_ALL='C'
+PAGER='cat'
+TZ='UTC'
+TERM='dumb'
 export LANG LC_ALL PAGER TERM TZ
-EDITOR=:
-VISUAL=:
+EDITOR=':'
+VISUAL=':'
 
 # Protect ourselves from common misconfiguration to export
 # CDPATH into the environment
 unset CDPATH
 
 # Protect ourselves from using predefined TODOTXT_CFG_FILE
-unset TODOTXT_CFG_FILE $(set|sed '/^TODOTXT_/!d;s/=.*//')
+unset TODOTXT_CFG_FILE $(set | sed '/^TODOTXT_/!d;s/=.*//')
 # To prevent any damage if someone has still those exported somehow in his env:
 unset TODO_FILE DONE_FILE REPORT_FILE TMP_FILE
 
@@ -112,14 +112,14 @@ else
 	}
 fi
 
-error () {
-	say_color error "error: $*"
-	trap - EXIT
-	exit 1
+error() {
+    say_color error "error: $*"
+    trap - EXIT
+    exit 1
 }
 
-say () {
-	say_color info "$*"
+say() {
+    say_color info "$*"
 }
 
 test "${test_description}" != "" ||
@@ -136,7 +136,7 @@ if test "$verbose" = "t"
 then
 	exec 4>&2 3>&1
 else
-	exec 4>/dev/null 3>/dev/null
+    exec 4>/dev/null 3>/dev/null
 fi
 
 test_failure=0
@@ -145,9 +145,9 @@ test_fixed=0
 test_broken=0
 test_success=0
 
-die () {
-	echo >&5 "FATAL: Unexpected exit with code $?"
-	exit 1
+die() {
+    echo >&5 "FATAL: Unexpected exit with code $?"
+    exit 1
 }
 
 trap 'die' EXIT
@@ -161,19 +161,19 @@ trap 'die' EXIT
 #
 # In particular, quoting isn't enough, as the path may contain the same quote
 # that we're using.
-test_set_editor () {
-	FAKE_EDITOR="$1"
-	export FAKE_EDITOR
-	VISUAL='"$FAKE_EDITOR"'
-	export VISUAL
+test_set_editor() {
+    FAKE_EDITOR=$1
+    export FAKE_EDITOR
+    VISUAL='"$FAKE_EDITOR"'
+    export VISUAL
 }
 
 # You are not expected to call test_ok_ and test_failure_ directly, use
 # the text_expect_* functions instead.
 
-test_ok_ () {
-	test_success=$((test_success + 1))
-	say_color "" "  ok $test_count: $@"
+test_ok_() {
+    test_success=$((test_success + 1))
+    say_color "" "  ok $test_count: $@"
 }
 
 test_failure_ () {
@@ -184,47 +184,46 @@ test_failure_ () {
 	test "$immediate" = "" || { trap - EXIT; exit 1; }
 }
 
-test_known_broken_ok_ () {
-	test_fixed=$((test_fixed + 1))
-	say_color "" "  FIXED $test_count: $@"
+test_known_broken_ok_() {
+    test_fixed=$((test_fixed + 1))
+    say_color "" "  FIXED $test_count: $@"
 }
 
-test_known_broken_failure_ () {
-	test_broken=$((test_broken + 1))
-	say_color skip "  still broken $test_count: $@"
+test_known_broken_failure_() {
+    test_broken=$((test_broken + 1))
+    say_color skip "  still broken $test_count: $@"
 }
 
 test_debug () {
 	test "$debug" = "" || eval "$1"
 }
 
-test_run_ () {
-	eval > output 2>&1 "$1"
-	eval_ret="$?"
-	cat >&3 output
-	return 0
+test_run_() {
+    eval > output 2>&1 "$1"
+    eval_ret=$?
+    cat >&3 output
+    return 0
 }
 
-test_skip () {
-	test_count=$((test_count + 1))
-	to_skip=
-	for skp in $SKIP_TESTS
-	do
-		case $this_test.$test_count in
-		$skp)
-			to_skip=t
-		esac
-	done
-	case "$to_skip" in
-	t)
-		say_color skip >&3 "skipping test: $@"
-		say_color skip "skip $test_count: $1"
-		: true
-		;;
-	*)
-		false
-		;;
-	esac
+test_skip() {
+    test_count=$((test_count + 1))
+    to_skip=
+    for skp in $SKIP_TESTS; do
+        case $this_test.$test_count in
+          $skp)
+            to_skip='t'
+        esac
+    done
+    case "$to_skip" in
+      t)
+        say_color skip >&3 "skipping test: $@"
+        say_color skip "skip $test_count: $1"
+        : true
+        ;;
+      *)
+        false
+        ;;
+    esac
 }
 
 test_expect_failure () {
@@ -377,11 +376,11 @@ test_external_without_stderr () {
 # This is not among top-level (test_expect_success | test_expect_failure)
 # but is a prefix that can be used in the test script, like:
 #
-#	test_expect_success 'complain and die' '
-#           do something &&
-#           do something else &&
-#	    test_must_fail git checkout ../outerspace
-#	'
+#    test_expect_success 'complain and die' '
+#        do something &&
+#        do something else &&
+#        test_must_fail git checkout ../outerspace
+#    '
 #
 # Writing this as "! git checkout ../outerspace" is wrong, because
 # the failure could be due to a segv.  We want a controlled failure.
@@ -394,18 +393,18 @@ test_must_fail () {
 # test_cmp is a helper function to compare actual and expected output.
 # You can use it like:
 #
-#	test_expect_success 'foo works' '
-#		echo expected >expected &&
-#		foo >actual &&
-#		test_cmp expected actual
-#	'
+#    test_expect_success 'foo works' '
+#        echo expected >expected &&
+#        foo >actual &&
+#        test_cmp expected actual
+#    '
 #
 # This could be written as either "cmp" or "diff -u", but:
 # - cmp's output is not nearly as easy to read as diff -u
 # - not all diff versions understand "-u"
 
 test_cmp() {
-	diff -u "$@"
+    diff -u "$@"
 }
 
 test_done () {
@@ -516,39 +515,39 @@ test_init_todo () {
 			cat > bin/date <<-EOF
 			#!/bin/sh
 			exec "$TODO_TEST_REAL_DATE" -d @\$TODO_TEST_TIME \$@
-			EOF
-			chmod 755 bin/date
-		;;
-		Mac10.5)
-			cat > bin/date <<-EOF
+		EOF
+        chmod 755 bin/date
+        ;;
+      Mac10.5)
+        cat > bin/date <<-EOF
 			#!/bin/sh
 			exec "$TODO_TEST_REAL_DATE" -j -f %s \$TODO_TEST_TIME \$@
-			EOF
-			chmod 755 bin/date
-		;;
-		Mac10.4)
-			cat > bin/date <<-EOF
+		EOF
+        chmod 755 bin/date
+        ;;
+      Mac10.4)
+        cat > bin/date <<-EOF
 			#!/bin/sh
 			exec "$TODO_TEST_REAL_DATE" -r \$TODO_TEST_TIME \$@
-			EOF
-			chmod 755 bin/date
-		;;
-		*)
-			echo "WARNING: Current date executable not recognized"
-			echo "So today date will be used, expect false negative tests..."
-		;;
-	esac
+		EOF
+        chmod 755 bin/date
+        ;;
+      *)
+        echo "WARNING: Current date executable not recognized"
+        echo "So today date will be used, expect false negative tests..."
+        ;;
+    esac
 
-	# Ensure a correct PATH for testing.
-	PATH=$owd/$root/bin:$PATH
-	export PATH
+    # Ensure a correct PATH for testing.
+    PATH=$owd/$root/bin:$PATH
+    export PATH
 
-	cd "$owd"
+    cd -- "$owd"
 }
 
 # Usage: test_tick [increment]
-test_tick () {
-	TODO_TEST_TIME=$((TODO_TEST_TIME + ${1:-86400}))
+test_tick() {
+    TODO_TEST_TIME=$((TODO_TEST_TIME + ${1:-86400}))
 }
 
 # Generate and run a series of tests based on a transcript.
@@ -603,24 +602,24 @@ test_todo_session () {
 	esac
     done
     if [ -n "$cmd" ]; then
-	if [ "$status" = 0 ]; then
-	    test_expect_output "$1 $subnum" "$cmd"
-	else
-	    test_expect_code_and_output "$status" "$1 $subnum" "$cmd"
-	fi
+        if [ "$status" = 0 ]; then
+            test_expect_output "$1 $subnum" "$cmd"
+        else
+            test_expect_code_and_output "$status" "$1 $subnum" "$cmd"
+        fi
     fi
 }
 
-test_shell () {
-	trap - EXIT
-	export PS1='$(ret_val=$?; [ "$ret_val" != "0" ] && echo -e "=== $ret_val\n\n>>> "||echo "\n>>> ")'
-	cat <<EOF
+test_shell() {
+    trap - EXIT
+    export PS1='$(ret_val=$?; [ "$ret_val" != "0" ] && echo -e "=== $ret_val\n\n>>> "||echo "\n>>> ")'
+    cat <<EOF
 Do your tests session here and
 don't forget to replace the hardcoded path with \$HOME in the transcript:
 $HOME/todo.txt => \$HOME/todo.txt
 EOF
-	bash --noprofile --norc
-	exit 0
+    bash --noprofile --norc
+    exit 0
 }
 
 test_todo_custom_completion () {
@@ -670,12 +669,12 @@ test_todo_custom_completion () {
 			else
 				test_failure_ "$description" "expected ${#EXPECT[@]} completion(s), got ${#COMPREPLY[@]}:
 $(test_cmp expect compreply)"
-			fi
-		else
-			test_failure_ "$description" "expected completions, actual exit code $ret"
-		fi
-	fi
-	echo >&3 ""
+            fi
+        else
+            test_failure_ "$description" "expected completions, actual exit code $ret"
+        fi
+    fi
+    echo >&3 ""
 }
 test_todo_completion () {
 	test "$#" = 3 ||
@@ -703,20 +702,18 @@ export TODO_ACTIONS_DIR="$HOME/.todo/actions"
 
 this_test=${0##*/}
 this_test=${this_test%%-*}
-for skp in $SKIP_TESTS
-do
-	to_skip=
-	for skp in $SKIP_TESTS
-	do
-		case "$this_test" in
-		$skp)
-			to_skip=t
-		esac
-	done
-	case "$to_skip" in
-	t)
-		say_color skip >&3 "skipping test $this_test altogether"
-		say_color skip "skip all tests in $this_test"
-		test_done
-	esac
+for skp in $SKIP_TESTS; do
+    to_skip=
+    for skp in $SKIP_TESTS; do
+        case "$this_test" in
+          $skp)
+            to_skip='t'
+        esac
+    done
+    case "$to_skip" in
+      t)
+        say_color skip >&3 "skipping test $this_test altogether"
+        say_color skip "skip all tests in $this_test"
+        test_done
+    esac
 done

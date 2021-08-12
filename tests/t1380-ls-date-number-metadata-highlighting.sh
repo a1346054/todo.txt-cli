@@ -15,7 +15,7 @@ EOF
 
 # config file specifying COLOR_PROJECT and COLOR_CONTEXT
 #
-TEST_TODO_LABEL_COLORS=todo-colors.cfg
+TEST_TODO_LABEL_COLORS='todo-colors.cfg'
 cat todo.cfg > "$TEST_TODO_LABEL_COLORS"
 
 echo "export COLOR_DATE='\\\\033[0;31m'" >>"$TEST_TODO_LABEL_COLORS"
