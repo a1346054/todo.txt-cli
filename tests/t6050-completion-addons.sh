@@ -28,7 +28,7 @@ makeCustomActions() {
     datafile="${1:?}/datafile"
     > "$datafile"
     chmod -x "$datafile"
-    [ -x "$datafile" ] && rm -- "$datafile"    # Some file systems may always make files executable; then, skip this check.
+    [[ -x $datafile ]] && rm -- "$datafile"    # Some file systems may always make files executable; then, skip this check.
 
     # Add an executable file in a folder with the same name as the file,
     # in order to ensure completion

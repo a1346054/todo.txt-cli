@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-[ "$TERM" != "dumb" ] && (
+[[ $TERM != 'dumb' ]] && (
         export TERM &&
-        [ -t 1 ] &&
+        [[ -t 1 ]] &&
         tput bold >/dev/null 2>&1 &&
         tput setaf 1 >/dev/null 2>&1 &&
         tput sgr0 >/dev/null 2>&1
@@ -14,7 +14,7 @@ case "$1" in
     color=; shift;;
 esac
 
-if [ -n "$color" ]; then
+if [[ -n $color ]]; then
     say_color() {
         (
         export TERM
@@ -23,7 +23,7 @@ if [ -n "$color" ]; then
           skip)  tput bold; tput setaf 2;; # bold green
           pass)  tput setaf 2;;            # green
           info)  tput setaf 3;;            # brown
-          *) [ -n "$quiet" ] && return;;
+          *) [[ -n $quiet ]] && return;;
         esac
         shift
         printf "* %s" "$*"
@@ -33,7 +33,7 @@ if [ -n "$color" ]; then
     }
 else
     say_color() {
-        [ -z "$1" ] && [ -n "$quiet" ] && return
+        [[ -z $1 && -n $quiet ]] && return
         shift
         echo "* $*"
     }
@@ -43,7 +43,7 @@ get_color() {
     # Only use the supplied color if there are actually instances of that
     # type, so that a clean test run does not distract the user by the
     # appearance of the error highlighting.
-    if [ "${1:?}" -eq 0 ]; then
+    if [[ ${1:?} -eq 0 ]]; then
         echo 'info'
     else
         echo "${2:-info}"

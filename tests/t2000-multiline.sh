@@ -23,10 +23,10 @@ drink milk" > "$HOME/output.multi"
 
 # Test output against expected
 diff "$HOME/output.multi" "$HOME/expect.multi"
-if [ $? -ne 0 ]; then
-  exit 1
+if [[ $? != 0 ]]; then
+    exit 1
 else
-  exit 0
+    exit 0
 fi
 )
 '
@@ -49,10 +49,10 @@ drink milk" > "$HOME/output.multi"
 
 # Test output against expected
 diff "$HOME/output.multi" "$HOME/expect.multi"
-if [ $? -ne 0 ]; then
-  exit 1
+if [[ $? != 0 ]]; then
+    exit 1
 else
-  exit 0
+    exit 0
 fi
 )
 '
@@ -74,10 +74,10 @@ drink milk" > "$HOME/output.multi"
 
 # Test output against expected
 diff "$HOME/output.multi" "$HOME/expect.multi"
-if [ $? -ne 0 ]; then
-  exit 1
+if [[ $? != 0 ]]; then
+    exit 1
 else
-  exit 0
+    exit 0
 fi
 )
 '
@@ -99,10 +99,10 @@ drink milk" > "$HOME/output.multi"
 
 # Test output against expected
 diff "$HOME/output.multi" "$HOME/expect.multi"
-if [ $? -ne 0 ]; then
-  exit 1
+if [[ $? != 0 ]]; then
+    exit 1
 else
-  exit 0
+    exit 0
 fi
 )
 '
@@ -125,10 +125,10 @@ drink milk" > "$HOME/output.multi"
 
 # Test output against expected
 diff "$HOME/output.multi" "$HOME/expect.multi"
-if [ $? -ne 0 ]; then
-  exit 1
+if [[ $? != 0 ]]; then
+    exit 1
 else
-  exit 0
+    exit 0
 fi
 )
 '

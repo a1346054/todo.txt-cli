@@ -16,7 +16,7 @@ case "$TEST_TEE_STARTED, $* " in
         TEST_TEE_STARTED='done' ${SHELL-sh} "$0" "$@" 2>&1;
         echo $? > "${BASE}.exit"
     ) | tee "${BASE}.out"
-    [ "$(cat "${BASE}.exit")" = 0 ]
+    [[ $(cat "${BASE}.exit") == 0 ]]
     exit
     ;;
 esac
@@ -49,17 +49,17 @@ unset TODO_FILE DONE_FILE REPORT_FILE TMP_FILE
 # This test checks if command xyzzy does the right thing...
 # '
 # . ./test-lib.sh
-[ "$ORIGINAL_TERM" != "dumb" ] && (
+[[ $ORIGINAL_TERM != 'dumb' ]] && (
         TERM=$ORIGINAL_TERM &&
         export TERM &&
-        [ -t 1 ] &&
+        [[ -t 1 ]] &&
         tput bold >/dev/null 2>&1 &&
         tput setaf 1 >/dev/null 2>&1 &&
         tput sgr0 >/dev/null 2>&1
     ) &&
     color='t'
 
-while [ $# -ne 0 ]; do
+while [[ $# != 0 ]]; do
     case "$1" in
       -d|--d|--de|--deb|--debu|--debug)
         debug='t'; shift;;
@@ -85,7 +85,7 @@ while [ $# -ne 0 ]; do
     esac
 done
 
-if [ -n "$color" ]; then
+if [[ -n $color ]]; then
     say_color() {
         (
         TERM=$ORIGINAL_TERM
@@ -95,7 +95,7 @@ if [ -n "$color" ]; then
           skip)  tput bold; tput setaf 2;; # bold green
           pass)  tput setaf 2;;            # green
           info)  tput setaf 3;;            # brown
-          *) [ -n "$quiet" ] && return;;
+          *) [[ -n $quiet ]] && return;;
         esac
         shift
         printf "* %s" "$*"
@@ -105,7 +105,7 @@ if [ -n "$color" ]; then
     }
 else
     say_color() {
-        [ -z "$1" ] && [ -n "$quiet" ] && return
+        [[ -z $1 && -n $quiet ]] && return
         shift
         echo "* $*"
     }
@@ -121,15 +121,15 @@ say() {
     say_color info "$*"
 }
 
-[ -z "${test_description}" ] && error "Test script did not set test_description."
+[[ -z ${test_description} ]] && error "Test script did not set test_description."
 
-if [ "$help" = "t" ]; then
+if [[ $help == 't' ]]; then
     echo "$test_description"
     exit 0
 fi
 
 exec 5>&1
-if [ "$verbose" = "t" ]; then
+if [[ $verbose == 't' ]]; then
     exec 4>&2 3>&1
 else
     exec 4>/dev/null 3>/dev/null
@@ -177,7 +177,7 @@ test_failure_() {
     say_color error "FAIL $test_count: $1"
     shift
     echo "$@"
-    [ -n "$immediate" ] && { trap - EXIT; exit 1; }
+    [[ -n $immediate ]] && { trap - EXIT; exit 1; }
 }
 
 test_known_broken_ok_() {
@@ -191,7 +191,7 @@ test_known_broken_failure_() {
 }
 
 test_debug() {
-    [ -n "$debug" ] && eval "$1"
+    [[ -n $debug ]] && eval "$1"
 }
 
 test_run_() {
@@ -223,12 +223,12 @@ test_skip() {
 }
 
 test_expect_failure() {
-    [ $# = 2 ] ||
+    [[ $# == 2 ]] ||
     error "bug in the test script: not 2 parameters to test-expect-failure"
     if ! test_skip "$@"; then
         say >&3 "checking known breakage: $2"
         test_run_ "$2"
-        if [ "$?" = 0 ] && [ "$eval_ret" = 0 ]; then
+        if [[ $? == 0 && $eval_ret == 0 ]]; then
             test_known_broken_ok_ "$1"
         else
             test_known_broken_failure_ "$1"
@@ -238,12 +238,12 @@ test_expect_failure() {
 }
 
 test_expect_success() {
-    [ $# = 2 ] ||
+    [[ $# == 2 ]] ||
     error "bug in the test script: not 2 parameters to test-expect-success"
     if ! test_skip "$@"; then
         say >&3 "expecting success: $2"
         test_run_ "$2"
-        if [ "$?" = 0 ] && [ "$eval_ret" = 0 ]; then
+        if [[ $? == 0 && $eval_ret == 0 ]]; then
             test_ok_ "$1"
         else
             test_failure_ "$@"
@@ -253,24 +253,24 @@ test_expect_success() {
 }
 
 test_expect_output() {
-    [ $# = 2 ] ||
+    [[ $# == 2 ]] ||
     error "bug in the test script: not 2 parameters to test-expect-output"
     test_expect_code_and_output 0 "$@"
 }
 
 test_expect_code_and_output() {
-    [ $# = 3 ] ||
+    [[ $# == 3 ]] ||
     error "bug in the test script: not 3 parameters to test-expect-code-and-output"
     if ! test_skip "$@"; then
-        if [ "$1" = 0 ]; then
+        if [[ $1 == 0 ]]; then
             say >&3 "expecting success and output: $3"
         else
             say >&3 "expecting exit code $1 and output: $3"
         fi
         test_run_ "$3"
-        if [ "$?" = 0 ] && [ "$eval_ret" = "$1" ]; then
+        if [[ $? == 0 && $eval_ret == "$1" ]]; then
             cmp_output=$(test_cmp expect output)
-            if [ "$?" = 0 ]; then
+            if [[ $? == 0 ]]; then
                 test_ok_ "$2"
             else
                 test_failure_ "$2" "$3" "$cmp_output"
@@ -285,12 +285,12 @@ expected exit code $1, actual ${eval_ret}${cmp_output:+}${cmp_output}"
 }
 
 test_expect_code() {
-    [ $# = 3 ] ||
+    [[ $# == 3 ]] ||
     error "bug in the test script: not 3 parameters to test-expect-code"
     if ! test_skip "$@"; then
         say >&3 "expecting exit code $1: $3"
         test_run_ "$3"
-        if [ "$?" = 0 ] && [ "$eval_ret" = "$1" ]; then
+        if [[ $? == 0 && $eval_ret == "$1" ]]; then
             test_ok_ "$2"
         else
             test_failure_ "$2" "$3" "expected exit code $1, actual ${eval_ret}"
@@ -308,7 +308,7 @@ test_expect_code() {
 # Usage: test_external description command arguments...
 # Example: test_external 'Perl API' perl ../path/to/test.pl
 test_external() {
-    [ $# = 3 ] ||
+    [[ $# == 3 ]] ||
     error >&5 "bug in the test script: not 3 parameters to test_external"
     descr=$1
     shift
@@ -320,7 +320,7 @@ test_external() {
         # test_run_, but keep its stdout on our stdout even in
         # non-verbose mode.
         "$@" 2>&4
-        if [ "$?" = 0 ]; then
+        if [[ $? == 0 ]]; then
             test_ok_ "$descr"
         else
             test_failure_ "$descr" "$@"
@@ -334,20 +334,20 @@ test_external_without_stderr() {
     # The temporary file has no (and must have no) security
     # implications.
     tmp=$TMPDIR
-    if [ -z "$tmp" ]; then
+    if [[ -z $tmp ]]; then
         tmp=/tmp
     fi
     stderr="$tmp/todotxt-external-stderr.$$.tmp"
     test_external "$@" 4> "$stderr"
-    [ -f "$stderr" ] || error "Internal error: $stderr disappeared."
+    [[ -f $stderr ]] || error "Internal error: $stderr disappeared."
     descr="no stderr: $1"
     shift
     say >&3 "expecting no stderr from previous command"
-    if [ ! -s "$stderr" ]; then
+    if [[ ! -s $stderr ]]; then
         rm -- "$stderr"
         test_ok_ "$descr"
     else
-        if [ "$verbose" = t ]; then
+        if [[ $verbose == 't' ]]; then
             output=$(echo; echo Stderr is:; cat "$stderr")
         else
             output=
@@ -372,7 +372,7 @@ test_external_without_stderr() {
 
 test_must_fail() {
     "$@"
-    [ $? -gt 0 ] && [ $? -le 129 ] || [ $? -gt 192 ]
+    [[ $? -gt 0 && $? -le 129 ]] || [[ $? -gt 192 ]]
 }
 
 # test_cmp is a helper function to compare actual and expected output.
@@ -407,10 +407,10 @@ test_done() {
 
 	EOF
 
-    if [ "$test_fixed" != 0 ]; then
+    if [[ $test_fixed != 0 ]]; then
         say_color pass "fixed $test_fixed known breakage(s)"
     fi
-    if [ "$test_broken" != 0 ]; then
+    if [[ $test_broken != 0 ]]; then
         say_color error "still have $test_broken known breakage(s)"
         msg="remaining $((test_count - test_broken)) test(s)"
     else
@@ -421,7 +421,7 @@ test_done() {
         say_color pass "passed all $msg"
 
         # Clean up this test.
-        [ -d "$remove_trash" ] &&
+        [[ -d $remove_trash ]] &&
         cd -- "$(dirname "$remove_trash")" &&
         rm -rf -- "$(basename "$remove_trash")"
         exit 0
@@ -442,7 +442,7 @@ TEST_DIRECTORY=$(pwd)
 
 # Test repository
 test="trash directory.$(basename "$0" .sh)"
-[ -z "$debug" ] && remove_trash="$TEST_DIRECTORY/$test"
+[[ -z $debug ]] && remove_trash="$TEST_DIRECTORY/$test"
 rm -rf -- "$test" || {
     trap - EXIT
     echo >&5 "FATAL: Cannot prepare test area"
@@ -452,7 +452,7 @@ rm -rf -- "$test" || {
 # Most tests can use the created repository, but some may need to create more.
 # Usage: test_init_todo <directory>
 test_init_todo() {
-    [ $# = 1 ] ||
+    [[ $# == 1 ]] ||
     error "bug in the test script: not 1 parameter to test_init_todo"
     owd=$(pwd)
     root=$1
@@ -547,7 +547,7 @@ test_tick() {
 # output5
 # EOF
 test_todo_session() {
-    [ $# = 1 ] ||
+    [[ $# == 1 ]] ||
     error "bug in the test script: extra args to test_todo_session"
     subnum=1
     cmd=""
@@ -556,15 +556,15 @@ test_todo_session() {
     while IFS= read -r line; do
         case $line in
           ">>> "*)
-            [ -n "$cmd" ] && error "bug in the test script: missing blank line separator in test_todo_session"
+            [[ -n $cmd ]] && error "bug in the test script: missing blank line separator in test_todo_session"
             cmd=${line#>>> }
             ;;
           "=== "*)
             status=${line#=== }
             ;;
           "")
-            if [ -n "$cmd" ]; then
-                if [ "$status" = 0 ]; then
+            if [[ -n $cmd ]]; then
+                if [[ $status == 0 ]]; then
                     test_expect_output "$1 $subnum" "$cmd"
                 else
                     test_expect_code_and_output "$status" "$1 $subnum" "$cmd"
@@ -583,8 +583,8 @@ test_todo_session() {
             ;;
         esac
     done
-    if [ -n "$cmd" ]; then
-        if [ "$status" = 0 ]; then
+    if [[ -n $cmd ]]; then
+        if [[ $status == 0 ]]; then
             test_expect_output "$1 $subnum" "$cmd"
         else
             test_expect_code_and_output "$status" "$1 $subnum" "$cmd"
@@ -594,7 +594,7 @@ test_todo_session() {
 
 test_shell() {
     trap - EXIT
-    export PS1='$(ret_val=$?; [ "$ret_val" != "0" ] && echo -e "=== $ret_val\n\n>>> "||echo "\n>>> ")'
+    export PS1='$(ret_val=$?; [[ $ret_val != 0 ]] && echo -e "=== $ret_val\n\n>>> "||echo "\n>>> ")'
     cat <<EOF
 Do your tests session here and
 don't forget to replace the hardcoded path with \$HOME in the transcript:
@@ -605,7 +605,7 @@ EOF
 }
 
 test_todo_custom_completion() {
-    [ $# = 4 ] ||
+    [[ $# == 4 ]] ||
     error "bug in the test script: not 4 parameters to test_todo_custom_completion"
     completeFunc=$1
     shift
@@ -613,7 +613,7 @@ test_todo_custom_completion() {
         description=$1
         expected=$3
 
-        if [ "${2: -1}" = ' ' ]; then
+        if [[ ${2: -1} == ' ' ]]; then
             offset=0
             say >&3 "expecting completions after: '$2'"
         else
@@ -631,14 +631,14 @@ test_todo_custom_completion() {
         . "$TEST_DIRECTORY/../todo_completion"
         $completeFunc
         ret=$?
-        if [ "$ret" = 0 ]; then
+        if [[ $ret == 0 ]]; then
             IFS=$'\n'
             printf "%s${EXPECT:+\\n}" "${EXPECT[*]}" > expect
             printf "%s${COMPREPLY:+\\n}" "${COMPREPLY[*]}" > compreply
             IFS=$SAVEIFS
 
-            if [ ${#COMPREPLY[@]} -eq ${#EXPECT[@]} ]; then
-                if [ "${COMPREPLY[*]}" = "${EXPECT[*]}" ]; then
+            if [[ ${#COMPREPLY[@]} -eq ${#EXPECT[@]} ]]; then
+                if [[ "${COMPREPLY[*]}" == "${EXPECT[*]}" ]]; then
                     test_ok_ "$description"
                 else
                     test_failure_ "$description" "$(test_cmp expect compreply)"
@@ -655,7 +655,7 @@ $(test_cmp expect compreply)"
 }
 
 test_todo_completion() {
-    [ $# = 3 ] ||
+    [[ $# == 3 ]] ||
     error "bug in the test script: not 3 parameters to test_todo_completion"
     test_todo_custom_completion _todo "$@"
 }
@@ -663,7 +663,7 @@ test_todo_completion() {
 test_init_todo "$test"
 # Use -P to resolve symlinks in our working directory so that the pwd
 # in subprocesses equals our $PWD (for pathname comparisons).
-cd -P "$test" || exit 1
+cd -P -- "$test" || exit 1
 
 # Since todo.sh refers to the home directory often,
 # make sure we don't accidentally grab the tester's config

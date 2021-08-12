@@ -22,9 +22,9 @@ test_todo_session 'invoke todo.sh' <<EOF
 TODO: 1 added.
 EOF
 
-test_expect_success 'the todo file has been created' '[ -e todo.txt ]'
-test_expect_success 'no done file has been created' '[ ! -e done.txt ]'
-test_expect_success 'no report file has been created' '[ ! -e report.txt ]'
+test_expect_success 'the todo file has been created' '[[ -e todo.txt ]]'
+test_expect_success 'no done file has been created' '[[ ! -e done.txt ]]'
+test_expect_success 'no report file has been created' '[[ ! -e report.txt ]]'
 
 test_todo_session 'perform archive' <<EOF
 >>> todo.sh -A -d test.cfg do 1
@@ -34,7 +34,7 @@ x 2009-02-13 notice the daisies
 TODO: ./todo.txt archived.
 EOF
 
-test_expect_success 'no done file has been created by the archiving' '[ ! -e done.txt ]'
+test_expect_success 'no done file has been created by the archiving' '[[ ! -e done.txt ]]'
 
 test_todo_session 'perform report' <<EOF
 >>> todo.sh -d test.cfg report
@@ -43,6 +43,6 @@ TODO: ./todo.txt archived.
 TODO: Report file updated.
 EOF
 
-test_expect_success 'no report file has been created by the reporting' '[ ! -e report.txt ]'
+test_expect_success 'no report file has been created by the reporting' '[[ ! -e report.txt ]]'
 
 test_done

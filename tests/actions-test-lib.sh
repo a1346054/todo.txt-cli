@@ -2,7 +2,7 @@
 
 make_action() {
     unset TODO_ACTIONS_DIR
-    [ -d .todo.actions.d ] || mkdir .todo.actions.d
+    [[ -d .todo.actions.d ]] || mkdir .todo.actions.d
     cat > ".todo.actions.d/$1" <<EOF
 #!/usr/bin/env bash
 [ "\$1" = "usage" ] && {
@@ -13,12 +13,12 @@ make_action() {
 }
 echo "custom action $1"
 EOF
-chmod +x ".todo.actions.d/$1"
+    chmod +x ".todo.actions.d/$1"
 }
 
 make_action_in_folder() {
     unset TODO_ACTIONS_DIR
-    [ -d .todo.actions.d ] || mkdir .todo.actions.d
+    [[ -d .todo.actions.d ]] || mkdir .todo.actions.d
     mkdir ".todo.actions.d/$1"
     cat > ".todo.actions.d/$1/$1" <<EOF
 #!/usr/bin/env bash
@@ -30,5 +30,5 @@ make_action_in_folder() {
 }
 echo "custom action $1 in folder $1"
 EOF
-chmod +x ".todo.actions.d/$1/$1"
+    chmod +x ".todo.actions.d/$1/$1"
 }
