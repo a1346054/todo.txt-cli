@@ -4,7 +4,7 @@ test_description='do functionality
 '
 . ./test-lib.sh
 
-#DATE=`date '+%Y-%m-%d'`
+#DATE=$(date '+%Y-%m-%d')
 
 test_todo_session 'do usage' <<EOF
 >>> todo.sh do B B

@@ -4,7 +4,7 @@ test_description='Multi-line functionality'
 
 . ./test-lib.sh
 
-## Replace test
+# Replace test
 # Create the expected file
 echo "1 smell the cheese
 TODO: Replaced task with:
@@ -31,7 +31,7 @@ fi
 )
 '
 
-## Add test
+# Add test
 # Create the expected file
 echo "2 eat apples eat oranges drink milk
 TODO: 2 added.">"$HOME/expect.multi"
@@ -57,7 +57,7 @@ fi
 )
 '
 
-## Append test
+# Append test
 # Create the expected file
 echo "1 smell the cheese eat apples eat oranges drink milk">"$HOME/expect.multi"
 
@@ -82,7 +82,7 @@ fi
 )
 '
 
-## Prepend test
+# Prepend test
 # Create the expected file
 echo "1 eat apples eat oranges drink milk smell the cheese">"$HOME/expect.multi"
 
@@ -107,7 +107,7 @@ fi
 )
 '
 
-## Multiple line addition
+# Multiple line addition
 # Create the expected file
 echo "2 eat apples
 TODO: 2 added." > "$HOME/expect.multi"

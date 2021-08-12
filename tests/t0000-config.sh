@@ -8,9 +8,8 @@ to find it somewhere else.
 '
 . ./test-lib.sh
 
-
 # Override default global config file
-export TODOTXT_GLOBAL_CFG_FILE=global.cfg
+export TODOTXT_GLOBAL_CFG_FILE='global.cfg'
 
 # Remove the pre-created todo.cfg to test behavior in its absence
 rm -f todo.cfg

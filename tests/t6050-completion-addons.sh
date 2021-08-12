@@ -12,12 +12,10 @@ readonly OPTIONS='-@ -@@ -+ -++ -d -f -h -p -P -PP -a -n -t -v -vv -V -x'
 readonly ADDONS='bar baz foobar'
 
 readonly CONTAINED='xeno zoolander'
-makeCustomActions()
-{
+makeCustomActions() {
     set -e
     mkdir "${1:?}"
-    for addon in $ADDONS
-    do
+    for addon in $ADDONS; do
         addonFile="${1}/$addon"
         > "$addonFile"
         chmod +x "$addonFile"
@@ -30,12 +28,11 @@ makeCustomActions()
     datafile="${1:?}/datafile"
     > "$datafile"
     chmod -x "$datafile"
-    [ -x "$datafile" ] && rm "$datafile"    # Some file systems may always make files executable; then, skip this check.
+    [ -x "$datafile" ] && rm -- "$datafile"    # Some file systems may always make files executable; then, skip this check.
 
     # Add an executable file in a folder with the same name as the file,
     # in order to ensure completion
-    for contained in $CONTAINED
-    do
+    for contained in $CONTAINED; do
         mkdir "${1}/$contained"
         > "${1}/$contained/$contained"
         chmod u+x "${1}/$contained/$contained"
@@ -43,14 +40,13 @@ makeCustomActions()
 
     set +e
 }
-removeCustomActions()
-{
+
+removeCustomActions() {
     set -e
     rmdir "${1}/subdir"
 
-    for contained in $CONTAINED
-    do
-        rm "${1}/$contained/$contained"
+    for contained in $CONTAINED; do
+        rm -- "${1}/$contained/$contained"
         rmdir "${1}/$contained"
     done
 

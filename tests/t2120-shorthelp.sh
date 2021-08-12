@@ -44,7 +44,7 @@ mv .todo.actions.d custom.actions
 echo 'export TODO_ACTIONS_DIR=$HOME/custom.actions' >> custom.cfg
 
 # Avoid the use of global config file, if it exists
-export TODOTXT_GLOBAL_CFG_FILE=global.cfg
+export TODOTXT_GLOBAL_CFG_FILE='global.cfg'
 
 test_todo_session '-h and fatal error without config' <<EOF
 >>> todo.sh -h | sed '/^ \\{0,2\\}[A-Z]/!d'

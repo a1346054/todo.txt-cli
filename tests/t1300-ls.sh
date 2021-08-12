@@ -7,7 +7,7 @@ sorting, output filtering and line numbering.
 '
 . ./test-lib.sh
 
-TEST_TODO_=todo.cfg
+TEST_TODO_='todo.cfg'
 
 cat > todo.txt <<EOF
 ccc xxx this line should be third.
@@ -18,7 +18,7 @@ EOF
 #
 # check the sort filter
 #
-TEST_TODO1_=todo1.cfg
+TEST_TODO1_='todo1.cfg'
 sed -e "s/^.*export TODOTXT_SORT_COMMAND=.*$/export TODOTXT_SORT_COMMAND='env LC_COLLATE=C sort -r -f -k2'/" "${TEST_TODO_}" > "${TEST_TODO1_}"
 
 test_todo_session 'checking TODOTXT_SORT_COMMAND' <<EOF
@@ -40,7 +40,7 @@ EOF
 #
 # check the final filter
 #
-TEST_TODO2_=todo2.cfg
+TEST_TODO2_='todo2.cfg'
 sed -e "s%^.*export TODOTXT_FINAL_FILTER=.*$%export TODOTXT_FINAL_FILTER=\"sed 's/^\\\(..\\\{20\\\}\\\).....*$/\\\1.../'\"%" "${TEST_TODO_}" > "${TEST_TODO2_}"
 
 test_todo_session 'checking TODOTXT_FINAL_FILTER' <<EOF
@@ -164,7 +164,7 @@ EOF
 #
 # check the x command line option
 #
-TEST_TODO3_=todo3.cfg
+TEST_TODO3_='todo3.cfg'
 sed -e "s%^.*export TODOTXT_FINAL_FILTER=.*$%export TODOTXT_FINAL_FILTER=\"grep -v xxx\"%" "${TEST_TODO_}" > "${TEST_TODO3_}"
 
 cat > todo.txt <<EOF
