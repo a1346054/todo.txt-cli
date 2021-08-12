@@ -83,7 +83,7 @@ TODO: 3 of 3 tasks shown
 EOF
 
 # Switch to config file
-echo "export TODOTXT_DATE_ON_ADD=1" >> todo.cfg
+echo 'export TODOTXT_DATE_ON_ADD=1' >> todo.cfg
 
 # Bump the clock, for good measure.
 test_tick 3600

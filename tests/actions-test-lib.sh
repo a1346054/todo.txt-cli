@@ -5,10 +5,10 @@ make_action() {
     [[ -d .todo.actions.d ]] || mkdir .todo.actions.d
     cat > ".todo.actions.d/$1" <<EOF
 #!/usr/bin/env bash
-[ "\$1" = "usage" ] && {
+[[ \$1 == 'usage' ]] && {
     echo "    $1 ITEM#[, ITEM#, ...] [TERM...]"
     echo "      This custom action does $1."
-    echo ""
+    echo ''
     exit
 }
 echo "custom action $1"
@@ -22,10 +22,10 @@ make_action_in_folder() {
     mkdir ".todo.actions.d/$1"
     cat > ".todo.actions.d/$1/$1" <<EOF
 #!/usr/bin/env bash
-[ "\$1" = "usage" ] && {
+[[ \$1 == 'usage' ]] && {
     echo "    $1 ITEM#[, ITEM#, ...] [TERM...]"
     echo "      This custom action does $1."
-    echo ""
+    echo ''
     exit
 }
 echo "custom action $1 in folder $1"

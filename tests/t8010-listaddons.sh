@@ -11,15 +11,15 @@ test_todo_session 'no custom actions' <<EOF
 >>> todo.sh listaddons
 EOF
 
-make_action "foo"
+make_action 'foo'
 test_todo_session 'one custom action' <<EOF
 >>> todo.sh listaddons
 foo
 EOF
 
-make_action "bar"
-make_action "ls"
-make_action "quux"
+make_action 'bar'
+make_action 'ls'
+make_action 'quux'
 test_todo_session 'multiple custom actions' <<EOF
 >>> todo.sh listaddons
 bar
@@ -41,7 +41,7 @@ ls
 quux
 EOF
 
-make_action_in_folder "chuck"
+make_action_in_folder 'chuck'
 # Add a bit of cruft in the action folders in order to ensure that we only
 # care about the executables with the same name as the folder in which they
 # reside.
@@ -49,7 +49,7 @@ touch .todo.actions.d/chuck/mc_hammer     # can't touch this
 chmod u+x .todo.actions.d/chuck/mc_hammer # better run, better run run
 touch .todo.actions.d/chuck/README
 
-make_action_in_folder "norris"
+make_action_in_folder 'norris'
 
 test_todo_session 'custom actions in subfolders' <<EOF
 >>> test -f .todo.actions.d/chuck/README

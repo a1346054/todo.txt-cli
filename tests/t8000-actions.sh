@@ -7,7 +7,7 @@ This test covers the contract between todo.sh and custom actions.
 . ./actions-test-lib.sh
 . ./test-lib.sh
 
-make_action "foo"
+make_action 'foo'
 test_todo_session 'executable action' <<EOF
 >>> todo.sh foo
 custom action foo
@@ -26,7 +26,7 @@ Try 'todo.sh -h' for more information.
 === 1
 EOF
 
-make_action "ls"
+make_action 'ls'
 test_todo_session 'overriding built-in action' <<EOF
 >>> todo.sh ls
 custom action ls
@@ -36,8 +36,8 @@ custom action ls
 TODO: 0 of 0 tasks shown
 EOF
 
-make_action "bad"
-echo "exit 42" >> .todo.actions.d/bad
+make_action 'bad'
+echo 'exit 42' >> .todo.actions.d/bad
 test_todo_session 'failing action' <<EOF
 >>> todo.sh bad
 custom action bad
