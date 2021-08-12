@@ -1,36 +1,35 @@
-#!/bin/sh
+#!/usr/bin/env bash
 # Based on git's GIT-VERSION-GEN.
 
-VF=VERSION-FILE
-DEF_VER=v2.2
+VF='VERSION-FILE'
+DEF_VER='v2.2'
 
 LF='
 '
 
-if test -d .git -o -f .git &&
-	VN=$(git describe --abbrev=0 --tags 2>/dev/null) &&
-	case "$VN" in
-	*$LF*) (exit 1) ;;
-	v[0-9]*)
-		git update-index -q --refresh
-		test -z "$(git diff-index --name-only HEAD --)" ||
-		VN="$VN-dirty" ;;
-	esac
+if [[ -d .git || -f .git ]] &&
+    VN=$(git describe --abbrev=0 --tags 2>/dev/null) &&
+    case "$VN" in
+      *$LF*) (exit 1);;
+      v[0-9]*)
+        git update-index -q --refresh
+        [[ -n $(git diff-index --name-only HEAD --) ]] &&
+        VN="$VN-dirty";;
+    esac
 then
-	VN=$(echo "$VN" | sed -e 's/-/./g');
+    VN=$(echo "$VN" | sed -e 's/-/./g')
 else
-	VN="$DEF_VER"
+    VN="$DEF_VER"
 fi
 
 VN=$(expr "$VN" : v*'\(.*\)')
 
-if test -r "$VF"
-then
-	VC=$(sed -e 's/^VERSION=//' <"$VF")
+if [[ -r $VF ]]; then
+    VC=$(sed -e 's/^VERSION=//' <"$VF")
 else
-	VC=unset
+    VC=unset
 fi
-test "$VN" = "$VC" || {
-	echo >&2 "VERSION=$VN"
-	echo "VERSION=$VN" >"$VF"
+[[ $VN == "$VC" ]] || {
+    echo "VERSION=$VN" >&2 
+    echo "VERSION=$VN" >"$VF"
 }
